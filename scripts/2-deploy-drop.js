@@ -10,7 +10,7 @@ import { readFileSync } from "fs";
       // A description for the collection.
       description: "A DAO for member of Crewbe.",
       // The image that will be held on our NFT! The fun part :).
-      image: readFileSync("scripts/assets/crewbe.jpg"),
+      image: readFileSync("scripts/assets/key.png"),
       // We need to pass in the address of the person who will be receiving the proceeds from sales of nfts in the contract.
       // We're planning on not charging people for the drop, so we'll pass in the 0x0 address
       // you can set this to your own wallet address if you want to charge for the drop.
@@ -22,13 +22,13 @@ import { readFileSync } from "fs";
     const editionDrop = sdk.getEditionDrop(editionDropAddress);
 
     // with this, we can get the metadata of our contract
-    // const metadata = await editionDrop.metadata.get();
+    const metadata = await editionDrop.metadata.get();
 
     console.log(
       "✅ Successfully deployed editionDrop contract, address:",
       editionDropAddress,
     );
-    // console.log("✅ editionDrop metadata:", metadata);
+    console.log("✅ editionDrop metadata:", metadata);
   } catch (error) {
     console.log("failed to deploy editionDrop contract", error);
   }
