@@ -17,24 +17,20 @@ const App = () => {
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
 
-  // Retrieve all our existing proposals from the contract.
-  useEffect(() => {
-    if (!hasClaimedNFT) {
-      return;
-    }
+  // State variable for us to know if user has our NFT.
+  const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
+  // isClaiming lets us easily keep a loading state while the NFT is minting.
+  const [isClaiming, setIsClaiming] = useState(false);
 
-    // A simple call to vote.getAll() to grab the proposals.
-    const getAllProposals = async () => {
-      try {
-        const proposals = await vote.getAll();
-        setProposals(proposals);
-        console.log("🌈 Proposals:", proposals);
-      } catch (error) {
-        console.log("failed to get proposals", error);
-      }
-    };
-    getAllProposals();
-  }, [hasClaimedNFT, vote]);
+  // Holds the amount of token each member has in state.
+  const [memberTokenAmounts, setMemberTokenAmounts] = useState([]);
+  // The array holding all of our members addresses.
+  const [memberAddresses, setMemberAddresses] = useState([]);
+
+  // A fancy function to shorten someones wallet address, no need to show the whole thing. 
+  const shortenAddress = (str) => {
+    return str.substring(0, 6) + "..." + str.substring(str.length - 4);
+  };
 
   // We also need to check if the user already voted.
   useEffect(() => {
@@ -65,20 +61,24 @@ const App = () => {
 
   }, [hasClaimedNFT, proposals, address, vote]);
 
-  // State variable for us to know if user has our NFT.
-  const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
-  // isClaiming lets us easily keep a loading state while the NFT is minting.
-  const [isClaiming, setIsClaiming] = useState(false);
+  // Retrieve all our existing proposals from the contract.
+  useEffect(() => {
+    if (!hasClaimedNFT) {
+      return;
+    }
 
-  // Holds the amount of token each member has in state.
-  const [memberTokenAmounts, setMemberTokenAmounts] = useState([]);
-  // The array holding all of our members addresses.
-  const [memberAddresses, setMemberAddresses] = useState([]);
-
-  // A fancy function to shorten someones wallet address, no need to show the whole thing. 
-  const shortenAddress = (str) => {
-    return str.substring(0, 6) + "..." + str.substring(str.length - 4);
-  };
+    // A simple call to vote.getAll() to grab the proposals.
+    const getAllProposals = async () => {
+      try {
+        const proposals = await vote.getAll();
+        setProposals(proposals);
+        console.log("🌈 Proposals:", proposals);
+      } catch (error) {
+        console.log("failed to get proposals", error);
+      }
+    };
+    getAllProposals();
+  }, [hasClaimedNFT, vote]);
 
   // This useEffect grabs all the addresses of our members holding our NFT.
   useEffect(() => {
